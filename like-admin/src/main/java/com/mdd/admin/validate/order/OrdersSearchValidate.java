@@ -1,4 +1,4 @@
-package com.mdd.admin.validate;
+package com.mdd.admin.validate.order;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ public class OrdersSearchValidate implements Serializable {
 
     private Integer status;//订单状态
 
-    private Long checkoutTimeStrat;//结账时间开始
+    private Long checkoutTimeStart;//结账时间开始
 
     private Long checkoutTimeEnd;//结账时间结束
 

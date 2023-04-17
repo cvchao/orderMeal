@@ -4,26 +4,34 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IOrderService;
+import com.mdd.admin.validate.order.DishAddValidate;
+import com.mdd.admin.validate.order.OrdersCreateValidate;
 import com.mdd.admin.vo.order.OrderDeskVo;
 import com.mdd.admin.vo.order.OrderDishCateVo;
 import com.mdd.admin.vo.order.OrderDishVo;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
+import com.mdd.common.entity.orders.Orders;
+import com.mdd.common.entity.orders.OrdersDish;
 import com.mdd.common.entity.system.SystemAuthDept;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
+import com.mdd.common.mapper.orders.OrdersDishMapper;
+import com.mdd.common.mapper.orders.OrdersMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
+
 public class OrderServiceImpl implements IOrderService {
 
     @Resource
@@ -32,6 +40,10 @@ public class OrderServiceImpl implements IOrderService {
     private ArticleCategoryMapper articleCategoryMapper;
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
+    private OrdersDishMapper ordersDishMapper;
 
     @Override
     public List<OrderDeskVo> list() {
@@ -96,4 +108,31 @@ public class OrderServiceImpl implements IOrderService {
         return orderDishVos;
 
     }
+
+    /**
+     * 创建订单
+     * @param ordersCreateValidate
+     */
+    @Override
+    public void ordersCreate(OrdersCreateValidate ordersCreateValidate) {
+        Orders orders = new Orders();
+        orders.setUserNum(ordersCreateValidate.getUserNum());
+        orders.setDeskId(ordersCreateValidate.getDeskId());
+        orders.setType(ordersCreateValidate.getType());
+        orders.setStatus(0);//待下单状态
+        orders.setAid(LikeAdminThreadLocal.getAdminId());
+        ordersMapper.insert(orders);
+    }
+
+    @Override
+    public void dishAdd(DishAddValidate dishAddValidate) {
+        OrdersDish ordersDish = new OrdersDish();
+        ordersDish.setDishId(dishAddValidate.getDishId());
+        ordersDish.setOrderId(dishAddValidate.getOrderId());
+        Article one = articleMapper.selectOne(new QueryWrapper<Article>().eq("summary", dishAddValidate.getOrderId()));
+        ordersDish.setAmount(new BigDecimal(one.getSummary()));
+        ordersDishMapper.insert(ordersDish);
+    }
+
+
 }

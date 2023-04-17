@@ -14,7 +14,7 @@ public class Orders implements Serializable {
     private Integer aid;        // 管理员id
     private String number;      //订单号
     private Integer deskId;     //桌号id
-    private Integer userId;     //用户id
+    private Integer userNum;     //用户id
     private Integer type;       //订单类型 0:后台点单1:扫码点单
     private Integer status;     //订单状态0:待下单1:待结帐2:已完成
     private String remark;      //下单备注

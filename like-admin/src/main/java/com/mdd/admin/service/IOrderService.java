@@ -1,5 +1,7 @@
 package com.mdd.admin.service;
 
+import com.mdd.admin.validate.order.DishAddValidate;
+import com.mdd.admin.validate.order.OrdersCreateValidate;
 import com.mdd.admin.vo.order.OrderDeskVo;
 import com.mdd.admin.vo.order.OrderDishCateVo;
 import com.mdd.admin.vo.order.OrderDishVo;
@@ -13,4 +15,15 @@ public interface IOrderService {
     List<OrderDishCateVo> dishCate();
 
     List<OrderDishVo> dishList();
+
+    /**
+     * 创建订单
+     * @param ordersCreateValidate
+     */
+    void ordersCreate(OrdersCreateValidate ordersCreateValidate);
+    /**
+     * 菜品加购
+     */
+    void dishAdd(DishAddValidate dishAddValidate);
+
 }

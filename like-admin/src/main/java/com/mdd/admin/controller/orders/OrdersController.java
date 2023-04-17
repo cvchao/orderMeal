@@ -1,17 +1,20 @@
 package com.mdd.admin.controller.orders;
 
 import com.mdd.admin.service.IOrdersServcice;
-import com.mdd.admin.validate.OrdersSearchValidate;
+import com.mdd.admin.validate.order.OrdersSearchValidate;
 import com.mdd.admin.validate.commons.PageValidate;
+import com.mdd.admin.vo.orders.OrdersDishListVo;
 import com.mdd.admin.vo.orders.OrdersListVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -20,7 +23,7 @@ public class OrdersController {
     private IOrdersServcice ordersServcice;
 
     /**
-     * 【请填写功能名称】列表
+     * 订单列表
      *
      * @param pageValidate 分页参数
      * @param searchValidate 搜索参数
@@ -30,5 +33,16 @@ public class OrdersController {
     public AjaxResult<PageResult<OrdersListVo>> list(@Validated PageValidate pageValidate, @Validated OrdersSearchValidate searchValidate){
         PageResult<OrdersListVo> voPageResult = ordersServcice.list(pageValidate, searchValidate);
         return AjaxResult.success(voPageResult);
+    }
+
+
+    /**
+     * 获得订单中菜品
+     * @return
+     */
+    @GetMapping("/dish")
+    public AjaxResult<List<OrdersDishListVo>> dish(@RequestParam Integer id){
+        List<OrdersDishListVo> dishList = ordersServcice.dish(id);
+        return AjaxResult.success(dishList);
     }
 }
