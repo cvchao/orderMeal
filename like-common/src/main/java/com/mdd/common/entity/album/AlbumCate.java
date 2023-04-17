@@ -17,6 +17,7 @@ public class AlbumCate implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;        // 主键ID
     private Integer pid;       // 父级ID
+    private Integer aid;       // 管理员ID
     private Integer type;      // 分类类型: [10=图片,20=视频]
     private String name;       // 分类名称
     private Integer isDelete;  // 是否删除: 0=否，1=是

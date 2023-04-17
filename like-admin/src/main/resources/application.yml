@@ -4,7 +4,7 @@ like:
   # 验证码配置
   captcha:
     # 是否开启验证码
-    status: true
+    status: false
     # 验证码有效时长
     expire: 120
     # 验证码缓存键名

@@ -21,18 +21,15 @@ public class SystemPostUpdateValidate implements Serializable {
     private Integer id;
 
     @NotNull(message = "code参数缺失")
-    @Length(min = 1, max = 30, message = "岗位编码必须在1~30个字符内")
     private String code;
 
     @NotNull(message = "name参数缺失")
-    @Length(min = 1, max = 30, message = "岗位名称必须在1~30个字符内")
     private String name;
 
     @NotNull(message = "请选择状态")
     @IntegerContains(values = {0, 1})
     private Integer isStop = 0;
 
-    @Length( max = 250, message = "岗位备注不能大于250个字符内")
     private String remarks = "";
 
     @NotNull(message = "排序号不能为空")

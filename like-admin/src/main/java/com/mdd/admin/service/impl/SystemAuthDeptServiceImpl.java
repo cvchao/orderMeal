@@ -1,19 +1,21 @@
 package com.mdd.admin.service.impl;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.ISystemAuthDeptService;
+import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.system.SystemDeptCreateValidate;
 import com.mdd.admin.validate.system.SystemDeptSearchValidate;
 import com.mdd.admin.validate.system.SystemDeptUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthDeptVo;
-import com.mdd.common.entity.system.SystemAuthAdmin;
+import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.system.SystemAuthDept;
-import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
-import com.mdd.common.util.ArrayUtils;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * 系统部门服务实现类
+ * 桌号管理服务实现类
  */
 @Service
 class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
@@ -32,7 +34,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
 
     /**
-     * 岗位所有
+     * 所有桌号
      *
      * @author fzr
      * @return List<SystemAuthDeptVo>
@@ -40,7 +42,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
     @Override
     public List<SystemAuthDeptVo> all() {
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
-                .gt("aid", LikeAdminThreadLocal.getAdminId())
+                .eq("aid", LikeAdminThreadLocal.getAdminId())
                 .eq("is_delete", 0)
                 .orderByDesc((Arrays.asList("sort", "id"))));
 
@@ -58,39 +60,63 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
     }
 
     /**
-     *  部门列表
+     * 部门列表
      *
-     * @author fzr
      * @param searchValidate 搜索参数
      * @return JSONArray
+     * @author fzr
      */
     @Override
-    public JSONArray list(SystemDeptSearchValidate searchValidate) {
-        QueryWrapper<SystemAuthDept> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_delete", 0).eq("aid",LikeAdminThreadLocal.getAdminId());
-        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
-        queryWrapper.select(SystemAuthDept.class, info ->
-                !info.getColumn().equals("is_delete") &&
-                !info.getColumn().equals("delete_time"));
+    public PageResult<SystemAuthDeptVo> list(PageValidate pageValidate, SystemDeptSearchValidate searchValidate) {
+        Integer pageNo   = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
+        Integer aid = LikeAdminThreadLocal.getAdminId();
 
-        systemAuthDeptMapper.setSearch(queryWrapper, searchValidate, new String[]{
-                "like:name:str",
+        MPJQueryWrapper<SystemAuthDept> mpjQueryWrapper = new MPJQueryWrapper<SystemAuthDept>()
+                .selectAll(SystemAuthDept.class)
+                .select("post.name as area")
+                .innerJoin("?_system_auth_post post ON post.id=t.area_id".replace("?_", GlobalConfig.tablePrefix))
+                .eq("t.is_delete",0)
+                .eq("t.aid",aid)
+                .orderByDesc(Arrays.asList("t.sort","t.id"));
+
+//        QueryWrapper<SystemAuthDept> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("is_delete", 0).eq("aid",LikeAdminThreadLocal.getAdminId());
+//        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+//        queryWrapper.select(SystemAuthDept.class, info ->
+//                !info.getColumn().equals("is_delete") &&
+//                !info.getColumn().equals("delete_time"));
+
+        systemAuthDeptMapper.setSearch(mpjQueryWrapper, searchValidate, new String[]{
+                "like:t.name:str",
+                "=:areaId@area_id:int",
                 "=:isStop@is_stop:int"
         });
 
-        List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(queryWrapper);
+        IPage<SystemAuthDeptVo> iPage = systemAuthDeptMapper.selectJoinPage(
+                new Page<>(pageNo, pageSize),
+                SystemAuthDeptVo.class,
+                mpjQueryWrapper
+        );
 
-        List<SystemAuthDeptVo> list = new LinkedList<>();
-        for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
-            SystemAuthDeptVo vo = new SystemAuthDeptVo();
-            BeanUtils.copyProperties(systemAuthDept, vo);
-
-            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthDept.getCreateTime()));
-            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthDept.getUpdateTime()));
-            list.add(vo);
+        for (SystemAuthDeptVo vo : iPage.getRecords()){
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
         }
 
-        return JSONArray.parseArray(JSONArray.toJSONString(list));
+//        List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(mpjQueryWrapper);
+//
+//        List<SystemAuthDeptVo> list = new LinkedList<>();
+//        for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
+//            SystemAuthDeptVo vo = new SystemAuthDeptVo();
+//            BeanUtils.copyProperties(systemAuthDept, vo);
+//
+//            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthDept.getCreateTime()));
+//            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthDept.getUpdateTime()));
+//            list.add(vo);
+//        }
+
+        return PageResult.iPageHandle(iPage);
     }
 
     /**

@@ -17,8 +17,9 @@ public class SystemAuthDept implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;       // 主键
     private Integer aid;      // 管理员id
-    private Integer areaId;  // 区域id
+    private Integer areaId;   // 区域id
     private String name;      // 部门名称
+    private Integer status;   //餐桌状态：[1:就餐中 0:空闲]
     private String duty;      // 负责人名
     private String mobile;    // 联系电话
     private Integer sort;     // 排序编号

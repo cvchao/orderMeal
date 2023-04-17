@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IAlbumsService;
 import com.mdd.admin.validate.AlbumCateValidate;
 import com.mdd.admin.validate.AlbumSearchValidate;
@@ -60,6 +61,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
                     !info.getColumn().equals("is_delete") &&
                     !info.getColumn().equals("delete_time"))
                 .eq("is_delete", 0)
+                .eq("aid", LikeAdminThreadLocal.getAdminId())
                 .orderByDesc("id");
 
         if (StringUtils.isNotNull(searchValidate.getCid())) {
@@ -211,6 +213,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
                         !info.getColumn().equals("is_delete") &&
                         !info.getColumn().equals("delete_time"))
                 .eq("is_delete", 0)
+                .eq("aid",LikeAdminThreadLocal.getAdminId())
                 .orderByDesc("id");
 
         if (StringUtils.isNotNull(searchValidate.getType()) && searchValidate.getType() > 0) {
@@ -247,6 +250,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
     public void cateAdd(AlbumCateValidate cateValidate) {
         AlbumCate albumCate = new AlbumCate();
         albumCate.setType(cateValidate.getType());
+        albumCate.setAid(LikeAdminThreadLocal.getAdminId());
         albumCate.setPid(cateValidate.getPid());
         albumCate.setName(cateValidate.getName());
         albumCate.setCreateTime(System.currentTimeMillis() / 1000);

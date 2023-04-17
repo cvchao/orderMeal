@@ -14,6 +14,8 @@ public class SystemDeptSearchValidate implements Serializable {
 
     private String name;
 
+    private Integer areaId;
+
     private Integer isStop;
 
 }

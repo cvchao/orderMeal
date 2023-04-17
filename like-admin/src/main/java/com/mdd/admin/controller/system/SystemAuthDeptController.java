@@ -3,11 +3,13 @@ package com.mdd.admin.controller.system;
 import com.alibaba.fastjson2.JSONArray;
 import com.mdd.admin.service.ISystemAuthDeptService;
 import com.mdd.admin.validate.commons.IdValidate;
+import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.system.SystemDeptCreateValidate;
 import com.mdd.admin.validate.system.SystemDeptSearchValidate;
 import com.mdd.admin.validate.system.SystemDeptUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthDeptVo;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,8 @@ public class SystemAuthDeptController {
      * @return AjaxResult<JSONArray>
      */
     @GetMapping("/list")
-    public AjaxResult<JSONArray> list(@Validated SystemDeptSearchValidate searchValidate) {
-        JSONArray list = iSystemAuthDeptService.list(searchValidate);
+    public AjaxResult<PageResult<SystemAuthDeptVo>> list(@Validated PageValidate pageValidate, @Validated SystemDeptSearchValidate searchValidate) {
+        PageResult<SystemAuthDeptVo> list = iSystemAuthDeptService.list(pageValidate,searchValidate);
         return AjaxResult.success(list);
     }
 
