@@ -1,10 +1,12 @@
 package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IOrderService;
 import com.mdd.admin.validate.order.DishAddValidate;
+import com.mdd.admin.validate.order.OrderSubmitValidate;
 import com.mdd.admin.validate.order.OrdersCreateValidate;
 import com.mdd.admin.vo.order.OrderDeskVo;
 import com.mdd.admin.vo.order.OrderDishCateVo;
@@ -20,8 +22,10 @@ import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.mapper.orders.OrdersDishMapper;
 import com.mdd.common.mapper.orders.OrdersMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
+import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 
@@ -114,14 +119,17 @@ public class OrderServiceImpl implements IOrderService {
      * @param ordersCreateValidate
      */
     @Override
-    public void ordersCreate(OrdersCreateValidate ordersCreateValidate) {
+    public String ordersCreate(OrdersCreateValidate ordersCreateValidate) {
         Orders orders = new Orders();
-        orders.setUserNum(ordersCreateValidate.getUserNum());
-        orders.setDeskId(ordersCreateValidate.getDeskId());
+        orders.setUserNum(ordersCreateValidate.getUserNum());//就餐人数
+        orders.setNumber(UUID.randomUUID().toString());
+        orders.setDeskId(ordersCreateValidate.getDeskId());//桌号id
         orders.setType(ordersCreateValidate.getType());
         orders.setStatus(0);//待下单状态
         orders.setAid(LikeAdminThreadLocal.getAdminId());
+        orders.setCreateTime(TimeUtils.timestamp());
         ordersMapper.insert(orders);
+        return orders.getNumber();
     }
 
     @Override
@@ -132,6 +140,14 @@ public class OrderServiceImpl implements IOrderService {
         Article one = articleMapper.selectOne(new QueryWrapper<Article>().eq("summary", dishAddValidate.getOrderId()));
         ordersDish.setAmount(new BigDecimal(one.getSummary()));
         ordersDishMapper.insert(ordersDish);
+    }
+
+    @Override
+    public void submit(OrderSubmitValidate orderSubmitValidate) {
+        Orders orders = ordersMapper.selectOne(new QueryWrapper<Orders>().eq("number", orderSubmitValidate.getNumber()));
+        orders.setStatus(1);//待结帐就餐中
+        orders.setRemark(orderSubmitValidate.getRemark());
+        ordersMapper.updateById(orders);
     }
 
 

@@ -2,6 +2,7 @@ package com.mdd.admin.controller.order;
 
 import com.mdd.admin.service.IOrderService;
 import com.mdd.admin.validate.order.DishAddValidate;
+import com.mdd.admin.validate.order.OrderSubmitValidate;
 import com.mdd.admin.validate.order.OrdersCreateValidate;
 import com.mdd.admin.vo.order.OrderDeskVo;
 import com.mdd.admin.vo.order.OrderDishCateVo;
@@ -50,10 +51,10 @@ public class OrderController {
     /**
      * 创建订单
      */
-    @PostMapping("/addOrders")
+    @PostMapping("/create")
     public AjaxResult<Object> ordersCreate(@RequestBody OrdersCreateValidate ordersCreateValidate){
-        iOrderService.ordersCreate(ordersCreateValidate);
-        return AjaxResult.success();
+        String number = iOrderService.ordersCreate(ordersCreateValidate);
+        return AjaxResult.success("success",number);//返回订单号
     }
     /**
      * 菜品添加
@@ -61,6 +62,15 @@ public class OrderController {
     @GetMapping("/dishAdd")
     public AjaxResult<Object> dishAdd(DishAddValidate dishAddValidate){
         iOrderService.dishAdd(dishAddValidate);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 下单
+     */
+    @GetMapping("/submit")
+    public AjaxResult<Object> submit(@RequestBody OrderSubmitValidate orderSubmitValidate){
+        iOrderService.submit(orderSubmitValidate);
         return AjaxResult.success();
     }
 
