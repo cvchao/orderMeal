@@ -3,6 +3,7 @@ package com.mdd.admin.controller.orders;
 import com.mdd.admin.service.IOrdersServcice;
 import com.mdd.admin.validate.order.OrdersSearchValidate;
 import com.mdd.admin.validate.commons.PageValidate;
+import com.mdd.admin.vo.orders.OrdersCurrentVo;
 import com.mdd.admin.vo.orders.OrdersDishListVo;
 import com.mdd.admin.vo.orders.OrdersListVo;
 import com.mdd.common.core.AjaxResult;
@@ -35,7 +36,15 @@ public class OrdersController {
         return AjaxResult.success(voPageResult);
     }
 
-
+    /**
+     * 获得当前商户正在进行的订单
+     * @return
+     */
+    @GetMapping("/current")
+    public AjaxResult<List<OrdersCurrentVo>> current(){
+        List<OrdersCurrentVo> vos = ordersServcice.current();
+        return AjaxResult.success(vos);
+    }
     /**
      * 获得订单中菜品
      * @return

@@ -21,7 +21,7 @@ public interface IOrderService {
      * 创建订单
      * @param ordersCreateValidate
      */
-    String ordersCreate(OrdersCreateValidate ordersCreateValidate);
+    Integer ordersCreate(OrdersCreateValidate ordersCreateValidate);
     /**
      * 菜品加购
      */

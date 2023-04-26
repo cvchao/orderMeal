@@ -19,19 +19,17 @@ public class SystemDeptCreateValidate implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "areaId参数缺失")
-    @DecimalMin(value = "0", message = "上级值不能少于0")
+    @DecimalMin(value = "0", message = "值不能少于0")
     private Integer areaId;
 
     @NotNull(message = "name参数缺失")
     @Length(min = 1, max = 100, message = "部门名称必须在1~100个字符内")
     private String name;
 
-//    @Length(min = 1, max = 30, message = "负责人名称必须在1~30个字符内")
-    private String duty = "";
-
-//    @Length(min = 11, max = 11, message = "手机号只能为11位")
-//    @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "手机号格式有误")
-    private String mobile;
+    @NotNull(message = "请设置最大就餐人数")
+    @DecimalMin(value = "1",message = "人数最少设置1")
+    @DecimalMax(value = "100",message = "人数最多设置100")
+    private Integer num;
 
     @NotNull(message = "请选择状态")
     @IntegerContains(values = {0, 1})

@@ -137,7 +137,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
                         .eq("is_delete", 0)
                         .last("limit 1"));
 
-        Assert.notNull(systemAuthDept, "部门已不存在!");
+        Assert.notNull(systemAuthDept, "不存在!");
 
         SystemAuthDeptVo vo  = new SystemAuthDeptVo();
         BeanUtils.copyProperties(systemAuthDept, vo);
@@ -159,8 +159,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         model.setAid(LikeAdminThreadLocal.getAdminId());
         model.setAreaId(createValidate.getAreaId());
         model.setName(createValidate.getName());
-        model.setDuty(createValidate.getDuty());
-        model.setMobile(createValidate.getMobile());
+        model.setNum(createValidate.getNum());
         model.setSort(createValidate.getSort());
         model.setIsStop(createValidate.getIsStop());
         model.setCreateTime(System.currentTimeMillis() / 1000);
@@ -188,8 +187,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         Assert.notNull(model, "部门不存在");
 
         model.setName(updateValidate.getName());
-        model.setDuty(updateValidate.getDuty());
-        model.setMobile(updateValidate.getMobile());
+        model.setNum(updateValidate.getNum());
         model.setSort(updateValidate.getSort());
         model.setIsStop(updateValidate.getIsStop());
         model.setUpdateTime(System.currentTimeMillis() / 1000);

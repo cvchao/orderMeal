@@ -119,7 +119,7 @@ public class OrderServiceImpl implements IOrderService {
      * @param ordersCreateValidate
      */
     @Override
-    public String ordersCreate(OrdersCreateValidate ordersCreateValidate) {
+    public Integer ordersCreate(OrdersCreateValidate ordersCreateValidate) {
         Orders orders = new Orders();
         orders.setUserNum(ordersCreateValidate.getUserNum());//就餐人数
         orders.setNumber(UUID.randomUUID().toString());
@@ -128,8 +128,7 @@ public class OrderServiceImpl implements IOrderService {
         orders.setStatus(0);//待下单状态
         orders.setAid(LikeAdminThreadLocal.getAdminId());
         orders.setCreateTime(TimeUtils.timestamp());
-        ordersMapper.insert(orders);
-        return orders.getNumber();
+        return ordersMapper.insert(orders);
     }
 
     @Override

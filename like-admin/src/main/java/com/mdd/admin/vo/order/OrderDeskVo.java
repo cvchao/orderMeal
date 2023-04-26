@@ -11,6 +11,7 @@ public class OrderDeskVo implements Serializable {
     private Integer id;        // 主键
     private String area;       // 区域
     private String name;       // 餐桌名称
+    private Integer num;       // 餐桌最大人数
     private Integer status;    //餐桌状态
     private Integer sort;      // 排序编号
     private Integer isStop;    // 是否停用: [0=否, 1=是]

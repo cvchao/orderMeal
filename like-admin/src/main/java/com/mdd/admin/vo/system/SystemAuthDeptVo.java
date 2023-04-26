@@ -14,9 +14,8 @@ public class SystemAuthDeptVo implements Serializable {
 
     private Integer id;        // 主键
     private String area;       // 区域
-    private String name;       // 部门名称
-    private String duty;       // 负责人
-    private String mobile;     // 联系电话
+    private String name;       // 名称
+    private Integer num;       // 最大就餐人数
     private Integer sort;      // 排序编号
     private Integer isStop;    // 是否停用: [0=否, 1=是]
     private String createTime; // 创建时间

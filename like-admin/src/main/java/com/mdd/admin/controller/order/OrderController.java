@@ -53,7 +53,7 @@ public class OrderController {
      */
     @PostMapping("/create")
     public AjaxResult<Object> ordersCreate(@RequestBody OrdersCreateValidate ordersCreateValidate){
-        String number = iOrderService.ordersCreate(ordersCreateValidate);
+        Integer number = iOrderService.ordersCreate(ordersCreateValidate);
         return AjaxResult.success("success",number);//返回订单号
     }
     /**

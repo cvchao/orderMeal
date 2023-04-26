@@ -1,5 +1,6 @@
 package com.mdd.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
@@ -7,6 +8,7 @@ import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IOrdersServcice;
 import com.mdd.admin.validate.order.OrdersSearchValidate;
 import com.mdd.admin.validate.commons.PageValidate;
+import com.mdd.admin.vo.orders.OrdersCurrentVo;
 import com.mdd.admin.vo.orders.OrdersDishListVo;
 import com.mdd.admin.vo.orders.OrdersListVo;
 import com.mdd.common.config.GlobalConfig;
@@ -19,6 +21,7 @@ import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,4 +83,22 @@ public class OrdersServiceImpl implements IOrdersServcice {
 
         return ordersDishListVos;
     }
+
+    @Override
+    public List<OrdersCurrentVo> current() {
+        QueryWrapper<Orders> ordersQueryWrapper = new QueryWrapper<Orders>()
+                .eq("aid", LikeAdminThreadLocal.getAdminId())
+                .ne("status", 2);
+        List<Orders> orders = ordersMapper.selectList(ordersQueryWrapper);
+        List<OrdersCurrentVo> ordersCurrentVos = new ArrayList<>();
+        for (Orders item : orders){
+            OrdersCurrentVo ordersCurrentVo = new OrdersCurrentVo();
+            BeanUtils.copyProperties(item,ordersCurrentVo);
+            ordersCurrentVo.setNumber(item.getId());
+            ordersCurrentVos.add(ordersCurrentVo);
+        }
+        return ordersCurrentVos;
+    }
+
+
 }

@@ -11,5 +11,4 @@ public class OrdersCreateValidate implements Serializable {
     private Integer deskId;  //桌号id
     private Integer userNum; //用餐人数
     private Integer type;    //下单类型0:后台点单1:扫码点单
-    private String remark;   //下单备注
 }
