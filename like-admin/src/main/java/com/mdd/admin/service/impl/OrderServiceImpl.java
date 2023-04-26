@@ -1,7 +1,6 @@
 package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IOrderService;
@@ -22,10 +21,8 @@ import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.mapper.orders.OrdersDishMapper;
 import com.mdd.common.mapper.orders.OrdersMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
-import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -132,13 +129,30 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public void dishAdd(DishAddValidate dishAddValidate) {
+    public Integer dishAdd(DishAddValidate dishAddValidate) {
         OrdersDish ordersDish = new OrdersDish();
         ordersDish.setDishId(dishAddValidate.getDishId());
         ordersDish.setOrderId(dishAddValidate.getOrderId());
-        Article one = articleMapper.selectOne(new QueryWrapper<Article>().eq("summary", dishAddValidate.getOrderId()));
+        ordersDish.setQuantity(1);
+        Article one = articleMapper.selectOne(new QueryWrapper<Article>().eq("id", dishAddValidate.getDishId()));
         ordersDish.setAmount(new BigDecimal(one.getSummary()));
         ordersDishMapper.insert(ordersDish);
+        return ordersDish.getId();
+    }
+
+    @Override
+    public void dishInc(Integer id) {
+        ordersDishMapper.dishInc(id);
+    }
+
+    @Override
+    public void dishDec(Integer id) {
+        ordersDishMapper.dishDec(id);
+    }
+
+    @Override
+    public void dishDel(Integer id) {
+        ordersDishMapper.dishDel(id);
     }
 
     @Override

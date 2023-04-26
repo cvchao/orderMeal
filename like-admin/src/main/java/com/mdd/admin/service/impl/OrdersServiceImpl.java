@@ -43,7 +43,6 @@ public class OrdersServiceImpl implements IOrdersServcice {
                 .selectAll(Orders.class)
                 .select("ad.name as deskName")
                 .innerJoin("?_system_auth_dept ad ON ad.id=t.desk_id".replace("?_", GlobalConfig.tablePrefix))
-                .eq("t.is_delete", 0)
                 .eq("t.aid",aid)
                 .orderByDesc("t.id");
 

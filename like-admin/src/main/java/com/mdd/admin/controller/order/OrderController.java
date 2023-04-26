@@ -8,6 +8,7 @@ import com.mdd.admin.vo.order.OrderDeskVo;
 import com.mdd.admin.vo.order.OrderDishCateVo;
 import com.mdd.admin.vo.order.OrderDishVo;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.enums.HttpEnum;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -60,8 +61,32 @@ public class OrderController {
      * 菜品添加
      */
     @GetMapping("/dishAdd")
-    public AjaxResult<Object> dishAdd(DishAddValidate dishAddValidate){
-        iOrderService.dishAdd(dishAddValidate);
+    public AjaxResult<Integer> dishAdd(DishAddValidate dishAddValidate){
+        Integer id = iOrderService.dishAdd(dishAddValidate);
+        return AjaxResult.success(HttpEnum.SUCCESS.getCode(),HttpEnum.SUCCESS.getMsg(),id);
+    }
+    /**
+     * 菜品+1
+     */
+    @GetMapping("/dishInc")
+    public AjaxResult<Object> dishInc(Integer id) {
+        iOrderService.dishInc(id);
+        return AjaxResult.success("");
+    }
+    /**
+     * 菜品-1
+     */
+    @GetMapping("/dishDec")
+    public AjaxResult<Object> dishDec(Integer id) {
+        iOrderService.dishDec(id);
+        return AjaxResult.success();
+    }
+    /**
+     * 菜品删除
+     */
+    @GetMapping("/dishDel")
+    public AjaxResult<Object> dishDel(Integer id) {
+        iOrderService.dishDel(id);
         return AjaxResult.success();
     }
 

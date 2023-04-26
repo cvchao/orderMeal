@@ -24,8 +24,36 @@ public interface IOrderService {
     Integer ordersCreate(OrdersCreateValidate ordersCreateValidate);
     /**
      * 菜品加购
+     *
+     * @return
      */
-    void dishAdd(DishAddValidate dishAddValidate);
+    Integer dishAdd(DishAddValidate dishAddValidate);
+    /**
+     * 菜品+1
+     *
+     * @param id
+     */
+    void dishInc(Integer id);
+
+    /**
+     * 菜品-1
+     *
+     * @param id
+     */
+    void dishDec(Integer id);
+
+    /**
+     * 菜品删除
+     *
+     * @param id
+     */
+    void dishDel(Integer id);
+
+    /**
+     * 出单
+     * @param orderSubmitValidate
+     */
+
 
     void submit(OrderSubmitValidate orderSubmitValidate);
 

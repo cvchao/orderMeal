@@ -15,5 +15,6 @@ public class OrdersDish implements Serializable {
     private Integer id;         // 主键
     private Integer orderId;    //订单id
     private Integer dishId;     //菜品id
+    private Integer quantity;   //菜品数量
     private BigDecimal amount;  //金额
 }
