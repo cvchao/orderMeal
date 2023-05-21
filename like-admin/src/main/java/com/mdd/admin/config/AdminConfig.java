@@ -15,7 +15,12 @@ public class AdminConfig {
     public static String[] notLoginUri = new String[]{
             "system:captcha", // 验证码
             "system:login",   // 登录接口
-            "index:config"    // 配置接口
+            "index:config",    // 配置接口
+            "fr:goods",        //前端获取全部菜品
+            "fr:seller",      //店铺信息
+            "fr:desk",        //桌号信息
+            "fr:create",      //前台下单
+            "fr:has",         //是否已有订单
     };
 
     // 免权限验证

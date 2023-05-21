@@ -1,6 +1,7 @@
 package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IOrderService;
@@ -125,7 +126,8 @@ public class OrderServiceImpl implements IOrderService {
         orders.setStatus(0);//待下单状态
         orders.setAid(LikeAdminThreadLocal.getAdminId());
         orders.setCreateTime(TimeUtils.timestamp());
-        return ordersMapper.insert(orders);
+        ordersMapper.insert(orders);
+        return orders.getId();
     }
 
     @Override
@@ -156,10 +158,27 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void toEmpty(Integer id) {
+        ordersDishMapper.delete(new QueryWrapper<OrdersDish>().eq("order_id",id));
+    }
+
+    @Override
     public void submit(OrderSubmitValidate orderSubmitValidate) {
-        Orders orders = ordersMapper.selectOne(new QueryWrapper<Orders>().eq("number", orderSubmitValidate.getNumber()));
+        Orders orders = new Orders();
+        orders.setId(orderSubmitValidate.getNumber());
         orders.setStatus(1);//待结帐就餐中
         orders.setRemark(orderSubmitValidate.getRemark());
+        orders.setAmount(ordersDishMapper.compute(orderSubmitValidate.getNumber()).toString());
+        ordersMapper.updateById(orders);
+    }
+
+    @Override
+    public void checkout(Integer oid) {
+        Assert.notNull(oid,"结账失败失败，缺少id值");
+        Orders orders = new Orders();
+        orders.setId(oid);
+        orders.setStatus(2);
+        orders.setCheckoutTime(TimeUtils.timestamp());
         ordersMapper.updateById(orders);
     }
 

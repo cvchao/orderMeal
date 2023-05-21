@@ -13,12 +13,8 @@ public class OrdersSearchValidate implements Serializable {
 
     private Integer status;//订单状态
 
-    private Long checkoutTimeStart;//结账时间开始
+    private String checkoutTime;//结账时间
 
-    private Long checkoutTimeEnd;//结账时间结束
-
-    private Long createTimeStart;//创建时间开始
-
-    private Long createTimeEnd;//创建时间结束
+    private String createTime;//创建时间
 
 }

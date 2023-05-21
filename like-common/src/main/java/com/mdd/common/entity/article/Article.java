@@ -20,7 +20,7 @@ public class Article implements Serializable {
     private Integer aid;       // 管理员id
     private String title;      // 标题
     private String intro;      // 简介
-    private String summary;    // 摘要
+    private String summary;    // 价格
     private String image;      // 封面
     private String content;    // 内容
     private String author;     // 作者

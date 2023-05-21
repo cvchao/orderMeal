@@ -38,20 +38,20 @@ public class IndexServiceImpl implements IIndexService {
         // 今日数据
         Map<String, Object> today = new LinkedHashMap<>();
         today.put("time", "2022-08-11 15:08:29");
-        today.put("todayVisits", 10);   // 访问量(人)
+        today.put("todayVisits", 60);   // 访问量(人)
         today.put("totalVisits", 100);  // 总访问量
-        today.put("todaySales", 30);    // 销售额(元)
+        today.put("todaySales", 3000);    // 销售额(元)
         today.put("totalSales", 65);    // 总销售额
-        today.put("todayOrder", 12);    // 订单量(笔)
+        today.put("todayOrder", 35);    // 订单量(笔)
         today.put("totalOrder", 255);   // 总订单量
-        today.put("todayUsers", 120);   // 新增用户
+        today.put("todayUsers", 15);   // 新增用户
         today.put("totalUsers", 360);   // 总访用户
         console.put("today", today);
 
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
         visitor.put("date", TimeUtils.daysAgoDate(15));
-        visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9,456,62,78,12,18,22,46));
+        visitor.put("list", Arrays.asList(1200,1300,1100,500,800,2200,1400,900,4560,6200,7800,1200,1800,2200,4600));
         console.put("visitor", visitor);
 
         return console;

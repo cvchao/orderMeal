@@ -7,6 +7,6 @@ import java.io.Serializable;
 public class OrderSubmitValidate implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String number;//订单号
+    private Integer number;//订单号
     private String remark;//订单备注
 }

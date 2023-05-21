@@ -19,7 +19,9 @@ public enum HttpEnum {
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),
 
-    SYSTEM_ERROR(500, "系统错误");
+    SYSTEM_ERROR(500, "系统错误"),
+
+    FRONT_DESK_ERROR(500,"当前餐桌已被禁止使用");
 
     /**
      * 构造方法

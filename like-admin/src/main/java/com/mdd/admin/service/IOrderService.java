@@ -50,11 +50,20 @@ public interface IOrderService {
     void dishDel(Integer id);
 
     /**
+     * 菜品清空
+     * @param id
+     */
+    void toEmpty(Integer id);
+
+    /**
      * 出单
      * @param orderSubmitValidate
      */
-
-
     void submit(OrderSubmitValidate orderSubmitValidate);
+
+    /**
+     * 结账
+     */
+    void checkout(Integer oid);
 
 }

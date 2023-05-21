@@ -47,10 +47,10 @@ public class OrdersServiceImpl implements IOrdersServcice {
                 .orderByDesc("t.id");
 
         ordersMapper.setSearch(mpjQueryWrapper, searchValidate, new String[]{
-                "=:type:int",
-                "=:status:int",
-                "between:checkoutTimeStart,checkoutTimeEnd@checkout_time:long",
-                "between:createTimeStart,createTimeEnd@create_time:long",
+                "=:type@t.type:int",
+                "=:status@t.status:int",
+                "between:checkoutTime@t.checkout_time:long",
+                "between:createTime@t.create_time:long",
         });
 
         IPage<OrdersListVo> iPage = ordersMapper.selectJoinPage(
