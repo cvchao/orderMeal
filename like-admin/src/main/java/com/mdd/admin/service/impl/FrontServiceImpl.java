@@ -1,5 +1,6 @@
 package com.mdd.admin.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
@@ -104,12 +105,16 @@ public class FrontServiceImpl implements IFrontService {
         }
         List<OrdersDish> ordersDishes = ordersDishMapper.selectList(new QueryWrapper<OrdersDish>().eq("order_id", orders.getId()));
         List<Map<String,Integer>> list = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("oid",orders.getId());
         for (OrdersDish ordersDish : ordersDishes){
             Map<String,Integer> map = new HashMap<>();
+            map.put("id",ordersDish.getId());
             map.put("dishId",ordersDish.getDishId());
             map.put("count",ordersDish.getQuantity());
             list.add(map);
         }
-        return list;
+        jsonObject.put("dish",list);
+        return jsonObject;
     }
 }

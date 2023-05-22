@@ -64,4 +64,9 @@ public interface ISystemAuthDeptService {
      */
     void del(Integer id);
 
+    /**
+     * 生成二维码
+     */
+    String createQR(Integer id);
+
 }

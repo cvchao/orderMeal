@@ -16,11 +16,13 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.system.SystemAuthDept;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
+import com.mdd.common.util.QRCodeUtil;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -214,6 +216,18 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAuthDeptMapper.updateById(model);
+    }
+
+    @Override
+    public String createQR(Integer id) {
+        Integer aid = LikeAdminThreadLocal.getAdminId();
+        String imgUrl = "";
+        try {
+            imgUrl = QRCodeUtil.createQRCode("127.0.0.1:8080?id=" + aid + "&did=" + id, 200, 200);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return imgUrl;
     }
 
 }

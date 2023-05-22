@@ -1,6 +1,5 @@
 package com.mdd.admin.controller.system;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.mdd.admin.service.ISystemAuthDeptService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -18,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 系统部门管理
+ * 桌号管理
  */
 @RestController
 @RequestMapping("api/system/dept")
@@ -28,10 +27,10 @@ public class SystemAuthDeptController {
     ISystemAuthDeptService iSystemAuthDeptService;
 
     /**
-     * 部门所有
+     * 所有
      *
+     * @return AjaxResult<List < SystemAuthDeptVo>>
      * @author fzr
-     * @return AjaxResult<List<SystemAuthDeptVo>>
      */
     @GetMapping("/all")
     public AjaxResult<List<SystemAuthDeptVo>> all() {
@@ -40,24 +39,24 @@ public class SystemAuthDeptController {
     }
 
     /**
-     * 部门列表
+     * 列表
      *
-     * @author fzr
      * @param searchValidate 搜索参数
      * @return AjaxResult<JSONArray>
+     * @author fzr
      */
     @GetMapping("/list")
     public AjaxResult<PageResult<SystemAuthDeptVo>> list(@Validated PageValidate pageValidate, @Validated SystemDeptSearchValidate searchValidate) {
-        PageResult<SystemAuthDeptVo> list = iSystemAuthDeptService.list(pageValidate,searchValidate);
+        PageResult<SystemAuthDeptVo> list = iSystemAuthDeptService.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
     /**
-     * 部门详情
+     * 详情
      *
-     * @author fzr
      * @param id 主键
      * @return AjaxResult<SystemAuthDeptVo>
+     * @author fzr
      */
     @GetMapping("/detail")
     public AjaxResult<SystemAuthDeptVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
@@ -66,11 +65,11 @@ public class SystemAuthDeptController {
     }
 
     /**
-     * 部门新增
+     * 新增
      *
-     * @author fzr
      * @param createValidate 参数
      * @return AjaxResult<Object>
+     * @author fzr
      */
     @PostMapping("/add")
     public AjaxResult<Object> add(@Validated @RequestBody SystemDeptCreateValidate createValidate) {
@@ -79,11 +78,11 @@ public class SystemAuthDeptController {
     }
 
     /**
-     * 部门编辑
+     * 编辑
      *
-     * @author fzr
      * @param updateValidate 参数
      * @return AjaxResult<Object>
+     * @author fzr
      */
     @PostMapping("/edit")
     public AjaxResult<Object> edit(@Validated @RequestBody SystemDeptUpdateValidate updateValidate) {
@@ -92,16 +91,27 @@ public class SystemAuthDeptController {
     }
 
     /**
-     * 部门删除
+     * 删除
      *
-     * @author fzr
      * @param idValidate 参数
      * @return AjaxResult<Object>
+     * @author fzr
      */
     @PostMapping("/del")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
         iSystemAuthDeptService.del(idValidate.getId());
         return AjaxResult.success();
+    }
+
+    /**
+     * 创建桌号二维码
+     * @param id
+     * @return
+     */
+    @GetMapping("/createQR")
+    public AjaxResult<Object> createQR(Integer id){
+        String result = iSystemAuthDeptService.createQR(id);
+        return AjaxResult.success("成功",result);
     }
 
 }

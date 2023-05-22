@@ -54,6 +54,7 @@
         <aliyun-java.version>4.5.16</aliyun-java.version>
 
         <weixin.version>4.4.0</weixin.version>
+        <zxing.version>3.3.3</zxing.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -241,6 +242,18 @@
                 <groupId>org.mdd</groupId>
                 <artifactId>like-common</artifactId>
                 <version>${like.version}</version>
+            </dependency>
+
+            <!--二维码库-->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${zxing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${zxing.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

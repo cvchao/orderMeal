@@ -21,6 +21,11 @@ public class AdminConfig {
             "fr:desk",        //桌号信息
             "fr:create",      //前台下单
             "fr:has",         //是否已有订单
+            "fr:dishAdd",     //菜品添加
+            "fr:dishDel",     //菜品删除
+            "fr:dishInc",     //菜品+1
+            "fr:dishDec",     //菜品-1
+            "fr:toEmpty",     //清空菜品
     };
 
     // 免权限验证
