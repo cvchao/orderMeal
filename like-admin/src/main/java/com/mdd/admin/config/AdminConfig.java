@@ -26,6 +26,8 @@ public class AdminConfig {
             "fr:dishInc",     //菜品+1
             "fr:dishDec",     //菜品-1
             "fr:toEmpty",     //清空菜品
+            "fr:submit",      //下单
+
     };
 
     // 免权限验证

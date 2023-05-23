@@ -4,6 +4,7 @@ import com.mdd.admin.service.IFrontService;
 import com.mdd.admin.service.IOrderService;
 import com.mdd.admin.validate.front.FrontOrdersCreateValidate;
 import com.mdd.admin.validate.order.DishAddValidate;
+import com.mdd.admin.validate.order.OrderSubmitValidate;
 import com.mdd.admin.validate.order.OrdersCreateValidate;
 import com.mdd.admin.vo.front.DeskVo;
 import com.mdd.admin.vo.front.GoodsVo;
@@ -99,6 +100,12 @@ public class FrontController {
     @GetMapping("/toEmpty")
     public AjaxResult<Object> toEmpty(Integer id) {
         iOrderService.toEmpty(id);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/submit")
+    public AjaxResult<Object> submit(@RequestBody OrderSubmitValidate orderSubmitValidate) {
+        iOrderService.submit(orderSubmitValidate);
         return AjaxResult.success();
     }
 }

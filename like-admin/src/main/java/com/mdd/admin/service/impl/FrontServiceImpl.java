@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IFrontService;
+import com.mdd.admin.socket.ClientSocket;
 import com.mdd.admin.validate.front.FrontOrdersCreateValidate;
 import com.mdd.admin.vo.front.DeskVo;
 import com.mdd.admin.vo.front.FoodsVo;
@@ -99,7 +100,7 @@ public class FrontServiceImpl implements IFrontService {
 
     @Override
     public Object has(Integer did) {
-        Orders orders = ordersMapper.selectOne(new QueryWrapper<Orders>().eq("desk_id", did).lt("status", 2));
+        Orders orders = ordersMapper.selectOne(new QueryWrapper<Orders>().eq("desk_id", did).eq("status", 0));
         if (orders == null){
             return null;
         }
@@ -117,4 +118,7 @@ public class FrontServiceImpl implements IFrontService {
         jsonObject.put("dish",list);
         return jsonObject;
     }
+    /**
+     * 发送socket消息
+     */
 }

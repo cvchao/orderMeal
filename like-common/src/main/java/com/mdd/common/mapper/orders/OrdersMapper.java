@@ -7,4 +7,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface OrdersMapper extends IBaseMapper<Orders> {
+
+    @Update("update la_orders set status=2 where desk_id=#{did} and status=1")
+    void updateOrdersStatus(Integer did);
 }

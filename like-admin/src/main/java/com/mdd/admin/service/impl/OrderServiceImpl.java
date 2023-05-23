@@ -173,13 +173,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public void checkout(Integer oid) {
-        Assert.notNull(oid,"结账失败失败，缺少id值");
-        Orders orders = new Orders();
-        orders.setId(oid);
-        orders.setStatus(2);
-        orders.setCheckoutTime(TimeUtils.timestamp());
-        ordersMapper.updateById(orders);
+    public void checkout(Integer did) {
+        Assert.notNull(did,"结账失败失败，缺少id值");
+        ordersMapper.updateOrdersStatus(did);
     }
 
 

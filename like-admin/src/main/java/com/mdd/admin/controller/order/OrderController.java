@@ -119,8 +119,8 @@ public class OrderController {
      * 结账
      */
     @GetMapping("/checkout")
-    public AjaxResult<Object> checkout(Integer oid){
-        iOrderService.checkout(oid);
+    public AjaxResult<Object> checkout(Integer did){
+        iOrderService.checkout(did);
         return AjaxResult.success();
     }
 
