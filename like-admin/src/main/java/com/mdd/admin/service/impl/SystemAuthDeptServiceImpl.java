@@ -223,7 +223,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         Integer aid = LikeAdminThreadLocal.getAdminId();
         String imgUrl = "";
         try {
-            imgUrl = QRCodeUtil.createQRCode("127.0.0.1:8080?id=" + aid + "&did=" + id, 200, 200);
+            imgUrl = QRCodeUtil.createQRCode("http://localhost:8080?id=" + aid + "&did=" + id, 200, 200);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -14,48 +14,34 @@ import java.util.*;
 @ServerEndpoint("/backSocket/{aid}")
 public class BackSocket {
 
-    private static final Map<String, Map<String,Session>> socketClient = new HashMap<>();
+    private static final Map<String, Session> socketClient = new HashMap<>();
 
-    private String did; //当前桌面组的id
-    private String uid; //客户端唯一id
+    private String aid; //当前桌面组的id
+//    private String uid; //客户端唯一id
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("did") String did){
-        Map<String, Session> sessionMap = socketClient.get(did);
-        this.did = did;
-        this.uid = UUID.randomUUID().toString();
-        if (sessionMap == null) {
-            Map<String,Session> group = new HashMap<>();
-            group.put(this.uid,session);
-            socketClient.put(did,group);
-        }else {
-            sessionMap.put(this.uid,session);
-        }
+    public void onOpen(Session session, @PathParam("aid") String aid) {
+        this.aid = aid;
+        socketClient.put(aid, session);
+        System.out.println(aid + "链接成功");
     }
 
     @OnClose
-    public void onClose(){
-        Map<String, Session> sessionMap = socketClient.get(did);
-        sessionMap.remove(this.uid);
-        if (sessionMap.isEmpty()){
-            socketClient.remove(this.did);
-        }
+    public void onClose() {
+        socketClient.remove(this.aid);
     }
 
     @OnMessage
-    public void onMessage(Session session,String message){
-        //向当前所在餐桌发送消息
-        sendToDesks(this.did,message);
+    public void onMessage(Session session, String message) {
     }
 
-    public void sendToDesks(String did,String msg){
-        Map<String, Session> sessionMap = socketClient.get(did);
-        Collection<Session> values = sessionMap.values();
-        Iterator<Session> iterator = values.iterator();
-        while (iterator.hasNext()){
-            Session session = iterator.next();
+
+    public static void  sendToSeller(String aid, String msg) {
+        Session session = socketClient.get(aid);
+        if (session != null && session.isOpen()) {
             session.getAsyncRemote().sendText(msg);
         }
+
     }
 
 }

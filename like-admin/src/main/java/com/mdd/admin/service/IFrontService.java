@@ -1,6 +1,7 @@
 package com.mdd.admin.service;
 
 import com.mdd.admin.validate.front.FrontOrdersCreateValidate;
+import com.mdd.admin.validate.order.OrderSubmitValidate;
 import com.mdd.admin.vo.front.DeskVo;
 import com.mdd.admin.vo.front.GoodsVo;
 import com.mdd.admin.vo.shop.ShopConfigVo;
@@ -25,4 +26,6 @@ public interface IFrontService {
      * 是否已有订单
      */
     Object has(Integer did);
+
+    void submit(OrderSubmitValidate orderSubmitValidate);
 }

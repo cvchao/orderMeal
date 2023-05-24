@@ -103,9 +103,14 @@ public class FrontController {
         return AjaxResult.success();
     }
 
+    /**
+     * 下单
+     * @param orderSubmitValidate
+     * @return
+     */
     @PostMapping("/submit")
     public AjaxResult<Object> submit(@RequestBody OrderSubmitValidate orderSubmitValidate) {
-        iOrderService.submit(orderSubmitValidate);
+        frontService.submit(orderSubmitValidate);
         return AjaxResult.success();
     }
 }

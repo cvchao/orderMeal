@@ -136,6 +136,7 @@ public class OrderServiceImpl implements IOrderService {
         ordersDish.setDishId(dishAddValidate.getDishId());
         ordersDish.setOrderId(dishAddValidate.getOrderId());
         ordersDish.setQuantity(1);
+        ordersDish.setCreateTime(TimeUtils.timestamp());
         Article one = articleMapper.selectOne(new QueryWrapper<Article>().eq("id", dishAddValidate.getDishId()));
         ordersDish.setAmount(new BigDecimal(one.getSummary()));
         ordersDishMapper.insert(ordersDish);
@@ -175,7 +176,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void checkout(Integer did) {
         Assert.notNull(did,"结账失败失败，缺少id值");
-        ordersMapper.updateOrdersStatus(did);
+        ordersMapper.updateOrdersStatus(did,TimeUtils.timestamp());
     }
 
 

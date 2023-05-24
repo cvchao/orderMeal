@@ -3,10 +3,10 @@ package com.mdd.admin.service.impl;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IFrontService;
-import com.mdd.admin.socket.ClientSocket;
+import com.mdd.admin.socket.BackSocket;
 import com.mdd.admin.validate.front.FrontOrdersCreateValidate;
+import com.mdd.admin.validate.order.OrderSubmitValidate;
 import com.mdd.admin.vo.front.DeskVo;
 import com.mdd.admin.vo.front.FoodsVo;
 import com.mdd.admin.vo.front.GoodsVo;
@@ -68,6 +68,7 @@ public class FrontServiceImpl implements IFrontService {
     @Override
     public ShopConfigVo seller(Integer id) {
         ShopConfig shopConfig = shopConfigMapper.selectOne(new QueryWrapper<ShopConfig>().eq("aid", id));
+        if (shopConfig.getStatus() == 0) throw new BaseException(500,"当前商家已暂停营业");
         ShopConfigVo shopConfigVo = new ShopConfigVo();
         BeanUtils.copyProperties(shopConfig,shopConfigVo);
         return shopConfigVo;
@@ -86,6 +87,8 @@ public class FrontServiceImpl implements IFrontService {
 
     @Override
     public Integer create(FrontOrdersCreateValidate ordersCreateValidate) {
+        Orders one = ordersMapper.selectOne(new QueryWrapper<Orders>().eq("desk_id", ordersCreateValidate.getDeskId()).eq("status", 0));
+        if (one != null) return one.getId();
         Orders orders = new Orders();
         orders.setUserNum(ordersCreateValidate.getUserNum());//就餐人数
         orders.setNumber(UUID.randomUUID().toString());
@@ -95,6 +98,7 @@ public class FrontServiceImpl implements IFrontService {
         orders.setAid(ordersCreateValidate.getAid());
         orders.setCreateTime(TimeUtils.timestamp());
         ordersMapper.insert(orders);
+        BackSocket.sendToSeller(orders.getAid().toString(),JSONObject.toJSONString(orders));
         return orders.getId();
     }
 
@@ -118,7 +122,15 @@ public class FrontServiceImpl implements IFrontService {
         jsonObject.put("dish",list);
         return jsonObject;
     }
-    /**
-     * 发送socket消息
-     */
+    @Override
+    public void submit(OrderSubmitValidate orderSubmitValidate) {
+        Orders orders = new Orders();
+        orders.setId(orderSubmitValidate.getNumber());
+        orders.setStatus(1);//待结帐就餐中
+        orders.setRemark(orderSubmitValidate.getRemark());
+        orders.setAmount(ordersDishMapper.compute(orderSubmitValidate.getNumber()).toString());
+        ordersMapper.updateById(orders);
+        Orders o = ordersMapper.selectById(orders);
+        BackSocket.sendToSeller(o.getAid().toString(),JSONObject.toJSONString(o));
+    }
 }
