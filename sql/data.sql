@@ -1088,7 +1088,7 @@ CREATE TABLE `la_system_config`  (
 -- ----------------------------
 INSERT INTO `la_system_config` VALUES (1, 'storage', 'default', 'qiniu', 1660620367, 1680251990);
 INSERT INTO `la_system_config` VALUES (2, 'storage', 'local', '{\"name\":\"本地存储\"}', 1660620367, 1679302717);
-INSERT INTO `la_system_config` VALUES (3, 'storage', 'qiniu', '{\"name\":\"七牛云存储\",\"bucket\":\"zhaoyafei\",\"secretKey\":\"zT3XIo9K1Dd5TU3No2j4inP5FFnEfNNUxjnXSV5F\",\"accessKey\":\"wV6SuE3kyKg1nnOS4w-zRKFZM7CH_W50VOkMHOVl\",\"domain\":\"http://qiniu.52yhqw.top\"}', 1660620367, 1680251990);
+INSERT INTO `la_system_config` VALUES (3, 'storage', 'qiniu', '{\"name\":\"七牛云存储\",\"bucket\":\"zhaoyafei\",\"secretKey\":\"zT3XIoFnEfNNUxjnXSV5F\",\"accessKey\":\"wV6SuE3kyKg1OVl\",\"domain\":\"http://qiniu\"}', 1660620367, 1680251990);
 INSERT INTO `la_system_config` VALUES (4, 'storage', 'aliyun', '{\"name\":\"阿里云OSS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\"}', 1660620367, 1662620071);
 INSERT INTO `la_system_config` VALUES (5, 'storage', 'qcloud', '{\"name\":\"腾讯云COS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\",\"region\":\"\"}', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (6, 'sms', 'default', 'aliyun', 1660620367, 1660620367);
