@@ -7,6 +7,7 @@ import com.mdd.common.plugin.storage.engine.LocalStorage;
 import com.mdd.common.plugin.storage.engine.QcloudStorage;
 import com.mdd.common.plugin.storage.engine.QiniuStorage;
 import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.MessageUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,17 +114,17 @@ public class StorageDriver {
 
         if (type == 10) {
             if (!Arrays.asList(GlobalConfig.uploadImageExt).contains(fileExt)) {
-                throw new OperateException("不被支持的扩展:" + fileExt);
+                throw new OperateException(MessageUtils.message("unsupported.extensions", fileExt));
             }
             if (fileSize > GlobalConfig.uploadImageSize) {
-                throw new OperateException("上传图片不能超出限制:" + (GlobalConfig.uploadImageSize / 1024 / 1024) + "M");
+                throw new OperateException(MessageUtils.message("uploading.images.cannot.exceed.the.limit",GlobalConfig.uploadImageSize / 1024 / 1024));
             }
         } else if (type == 20) {
             if (!Arrays.asList(GlobalConfig.uploadVideoExt).contains(fileExt)) {
-                throw new OperateException("不被支持的扩展:" + fileExt);
+                throw new OperateException(MessageUtils.message("unsupported.extensions",fileExt));
             }
             if (fileSize > GlobalConfig.uploadVideoSize) {
-                throw new OperateException("上传视频不能超出限制:" + (GlobalConfig.uploadVideoSize / 1024 / 1024) + "M");
+                throw new OperateException(MessageUtils.message("uploading.video.cannot.exceed.the.limit",GlobalConfig.uploadVideoSize / 1024 / 1024));
             }
         }
     }

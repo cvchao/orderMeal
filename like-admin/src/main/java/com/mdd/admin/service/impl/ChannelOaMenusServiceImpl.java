@@ -43,7 +43,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
     @Override
     public void save(List<Object> objs, Boolean isPublish) {
         if (objs.size() > 3) {
-            throw new OperateException("一级菜单超出限制(最多3个)");
+            throw new OperateException(MessageUtils.message("first.level.menu.exceeds.limit.(maximum.of.3)"));
         }
 
         List<Map<String, String>> params = new LinkedList<>();
@@ -54,21 +54,21 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
         List<WxMenuButton> menuButtons = new LinkedList<>();
         for (Map<String, String> item : params) {
             // 一级菜单
-            Assert.notNull(item.get("name"), "一级菜单名称不能为空");
+            Assert.notNull(item.get("name"), MessageUtils.message("the.first.level.menu.name.cannot.be.empty"));
             WxMenuButton wxMenuButton = new WxMenuButton();
             wxMenuButton.setName(item.get("name"));
             if (Integer.parseInt(item.get("menuType")) == 1) {
-                Assert.notNull(item.get("visitType"), "一级菜单visitType数缺失");
+                Assert.notNull(item.get("visitType"), MessageUtils.message("missing.visitTypes.in.the.first.level.menu"));
                 if (item.get("visitType").equals("miniprogram")) {
-                    Assert.notNull(item.get("appId"), "一级菜单appId参数缺失");
-                    Assert.notNull(item.get("url"), "一级菜单url数缺失");
-                    Assert.notNull(item.get("pagePath"), "一级菜单pagePath数缺失");
+                    Assert.notNull(item.get("appId"), MessageUtils.message("the.first.level.menu.appId.parameter.is.missing"));
+                    Assert.notNull(item.get("url"), MessageUtils.message("missing.number.of.URLs.in.the.first.level.menu"));
+                    Assert.notNull(item.get("pagePath"), MessageUtils.message("missing.number.of.pagePath.in.the.first.level.menu"));
                     wxMenuButton.setType(item.get("visitType"));
                     wxMenuButton.setAppId(item.get("appId"));
                     wxMenuButton.setUrl(item.get("url"));
                     wxMenuButton.setPagePath(item.get("pagePath"));
                 } else {
-                    Assert.notNull(item.get("url"), "一级菜单url数缺失");
+                    Assert.notNull(item.get("url"), MessageUtils.message("missing.number.of.URLs.in.the.first.level.menu"));
                     wxMenuButton.setType(item.get("visitType"));
                     wxMenuButton.setUrl(item.get("url"));
                     wxMenuButton.setAppId(item.getOrDefault("appId", ""));
@@ -78,25 +78,25 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
 
              // 子级菜单
             if (Integer.parseInt(item.get("menuType")) == 2) {
-                Assert.notNull(item.get("subButtons"), "子级菜单不能为空");
+                Assert.notNull(item.get("subButtons"), MessageUtils.message("the.submenu.cannot.be.empty"));
                 List<Map<String, String>> subButtons = ArrayUtils.stringToListAsMapStr(item.get("subButtons"));
 
                 if (subButtons.size() > 5) {
-                    throw new OperateException("子级菜单超出限制(最多5个)");
+                    throw new OperateException(MessageUtils.message("subLevel.menu.exceeds.limit.(maximum.of.5)"));
                 }
                 for (Map<String, String> subItem : subButtons) {
                     WxMenuButton subMenuButton = new WxMenuButton();
-                    Assert.notNull(subItem.get("visitType"), "子级菜单visitType参数缺失!");
+                    Assert.notNull(subItem.get("visitType"), MessageUtils.message("missing.visitTypes.in.the.first.level.menu"));
                     if (subItem.get("visitType").equals("miniprogram")) {
-                        Assert.notNull(subItem.get("appId"), "子级菜单appId参数缺失!");
-                        Assert.notNull(subItem.get("url"), "子级菜单url数缺失!");
-                        Assert.notNull(subItem.get("pagePath"), "子级菜单pagePath数缺失!");
+                        Assert.notNull(subItem.get("appId"), MessageUtils.message("the.sub.menu.appId.parameter.is.missing"));
+                        Assert.notNull(subItem.get("url"), MessageUtils.message("the.sub.menu.url.parameter.is.missing"));
+                        Assert.notNull(subItem.get("pagePath"), MessageUtils.message("the.sub.menu.pagePath.parameter.is.missing"));
                         wxMenuButton.setType(subItem.get("visitType"));
                         wxMenuButton.setAppId(subItem.get("appId"));
                         wxMenuButton.setUrl(subItem.get("url"));
                         wxMenuButton.setPagePath(subItem.get("pagePath"));
                     } else {
-                        Assert.notNull(subItem.get("url"), "子级菜单url数缺失");
+                        Assert.notNull(subItem.get("url"), MessageUtils.message("the.sub.menu.url.parameter.is.missing"));
                         wxMenuButton.setType(subItem.get("visitType"));
                         wxMenuButton.setUrl(subItem.get("url"));
                     }

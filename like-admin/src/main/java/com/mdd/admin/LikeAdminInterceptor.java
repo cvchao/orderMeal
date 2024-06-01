@@ -10,6 +10,7 @@ import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolsUtils;
 import com.mdd.common.util.YmlUtils;
+import com.mdd.common.validator.annotation.FreeTokenAnnotation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,13 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(@NotNull HttpServletRequest request,
                              @NotNull HttpServletResponse response,
                              @NotNull Object handler) throws Exception {
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
 
+        // 检查方法上是否存在指定的注解
+        if (method.isAnnotationPresent(FreeTokenAnnotation.class)) {
+            return true;
+        }
         // 请求的类型
         response.setContentType("application/json;charset=utf-8");
         if (!(handler instanceof HandlerMethod)) {

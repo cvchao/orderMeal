@@ -282,7 +282,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
     @Override
     public void edit(SystemAdminUpdateValidate updateValidate, Integer adminId) {
         if (!adminId.equals(1) && updateValidate.getId().equals(1)) {
-            throw new OperateException("您无权限编辑系统管理员!");
+            throw new OperateException(MessageUtils.message("you.do.not.have.permission.to.edit.the.system.administrator"));
         }
 
         String[] field = {"id", "username", "nickname"};
@@ -290,21 +290,21 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .select(field)
                 .eq("id", updateValidate.getId())
                 .eq("is_delete", 0)
-                .last("limit 1")), "账号不存在了!");
+                .last("limit 1")), MessageUtils.message("the.account.no.longer.exists"));
 
         Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("username", updateValidate.getUsername())
                 .ne("id", updateValidate.getId())
-                .last("limit 1")), "账号已存在换一个吧!");
+                .last("limit 1")), MessageUtils.message("account.already.exists.please.replace.it"));
 
         Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("nickname", updateValidate.getNickname())
                 .ne("id", updateValidate.getId())
-                .last("limit 1")), "昵称已存在换一个吧!");
+                .last("limit 1")), MessageUtils.message("nickname.already.exists.please.change.it"));
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(updateValidate.getId());
@@ -351,7 +351,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Assert.notNull(model, "账号不存在了!");
+        Assert.notNull(model, MessageUtils.message("the.account.no.longer.exists"));
 
         String createAvatar  = upInfoValidate.getAvatar();
         String defaultAvatar = "/api/static/backend_avatar.png";
@@ -363,7 +363,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         if (StringUtils.isNotNull(upInfoValidate.getPassword()) && StringUtils.isNotEmpty(upInfoValidate.getPassword())) {
             String currPassword = ToolsUtils.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
-            Assert.isFalse(!currPassword.equals(model.getPassword()), "当前密码不正确!");
+            Assert.isFalse(!currPassword.equals(model.getPassword()), MessageUtils.message("the.current.password.is.incorrect"));
             String salt   = ToolsUtils.randomString(5);
             String pwd    = ToolsUtils.makeMd5( upInfoValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -392,10 +392,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .select(field)
                 .eq("id", id)
                 .eq("is_delete", 0)
-                .last("limit 1")), "账号已不存在!");
+                .last("limit 1")), MessageUtils.message("the.account.no.longer.exists"));
 
-        Assert.isFalse(id.equals(1), "系统管理员不允许删除!");
-        Assert.isFalse(id.equals(adminId) , "不能删除自己!");
+        Assert.isFalse(id.equals(1), MessageUtils.message("the.system.administrator.does.not.allow.deletion"));
+        Assert.isFalse(id.equals(adminId) , MessageUtils.message("cannot.delete.oneself"));
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(id);
@@ -422,8 +422,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Assert.notNull(systemAuthAdmin, "账号已不存在!");
-        Assert.isFalse(id.equals(adminId) , "不能禁用自己!");
+        Assert.notNull(systemAuthAdmin, MessageUtils.message("the.account.no.longer.exists"));
+        Assert.isFalse(id.equals(adminId) , MessageUtils.message("cannot.ban.oneself"));
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);

@@ -9,6 +9,7 @@ import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.plugin.storage.StorageDriver;
 import com.mdd.common.plugin.storage.UploadFilesVo;
+import com.mdd.common.util.MessageUtils;
 import com.mdd.common.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,11 +46,11 @@ public class UploadController {
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");
         } catch (Exception e) {
-            throw new OperateException("请正确选择上传图片!");
+            throw new OperateException(MessageUtils.message("please.select.the.correct.upload.image"));
         }
 
         if (multipartFile == null) {
-            throw new OperateException("请选择上传图片!");
+            throw new OperateException(MessageUtils.message("please.select.upload.image"));
         }
 
         StorageDriver storageDriver = new StorageDriver();
@@ -84,11 +85,11 @@ public class UploadController {
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");
         } catch (Exception e) {
-            throw new OperateException("请选择上传视频!");
+            throw new OperateException(MessageUtils.message("Please.upload.the.video"));
         }
 
         if (multipartFile == null) {
-            throw new OperateException("请选择上传视频!");
+            throw new OperateException(MessageUtils.message("Please.upload.the.video"));
         }
 
         StorageDriver storageDriver = new StorageDriver();
